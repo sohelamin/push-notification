@@ -1,4 +1,4 @@
-const applicationServerPublicKey = '<PUBLIC_KEY>';
+const applicationServerPublicKey = '<Your Public Key>';
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
