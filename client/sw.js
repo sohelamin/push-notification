@@ -1,12 +1,3 @@
-// {
-//     "title": "Push Notification",
-//     "body": "Hey Dude!",
-//     "icon": "icon.png",
-//     "actions": [
-//         { "action": "ok", "title": "Ok", "url": "https://www.appzcoder.com/" }
-//     ]
-// }
-
 self.addEventListener('push', (event) => {
   const data = event.data.json();
   const options = {
@@ -17,8 +8,8 @@ self.addEventListener('push', (event) => {
   if (data.icon) {
     options.icon = data.icon;
   }
-  if (data.launchUrl) {
-    options.data.launchUrl = data.launchUrl;
+  if (data.url) {
+    options.data.url = data.url;
   }
   if (data.actions) {
     options.actions = options.data.actions = data.actions;
@@ -37,9 +28,10 @@ self.addEventListener('notificationclick', (event) => {
     return;
   }
 
-  if (data.launchUrl) {
-    event.waitUntil(clients.openWindow(data.launchUrl));
+  if (data.url) {
+    event.waitUntil(clients.openWindow(data.url));
   } else if (event.action) {
-    event.waitUntil(clients.openWindow(data.actions[0].url));
+    const targetAction = data.actions.find(action => action.action === event.action);
+    event.waitUntil(clients.openWindow(targetAction.url));
   }
 });

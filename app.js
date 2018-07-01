@@ -1,40 +1,50 @@
-const applicationServerPublicKey = '<Your Public Key>';
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const router = express.Router();
+const webpush = require('web-push');
+const cors = require('cors');
 
-function urlB64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
-    .replace(/_/g, '/');
+// VAPID keys should only be generated only once.
+const vapidKeys = {
+  publicKey: 'BIRGhYwBRTK7fhV-lOGFUUVNlIo4cMzZ2YjuYR12r5iHbbCVE3WbmWY8Ret5-6d_yhZMeNkfvqFpcwfTFRH-uYM',
+  privateKey: 'XcL9ZY1-feCk-jzbbftS97HrnCfFIM3Sq92CxWNVpM4'
+};
 
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
+// webpush.setGCMAPIKey('<Your GCM API Key Here>');
+webpush.setVapidDetails(
+  'mailto:sohelamincse@gmail.com',
+  vapidKeys.publicKey,
+  vapidKeys.privateKey
+);
 
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors({origin: '*'}));
+
+let subscriptions = [];
+
+router.get('/', async (req, res) => {
+  res.send('Hello World!');
+});
+router.post('/subscribe', async (req, res) => {
+  const subscription = req.body.subscription;
+  // @Todo check and store the subscription
+  subscriptions.push(subscription);
+
+  res.send('Subscribed!');
+});
+router.post('/send', async (req, res) => {
+  const notification = req.body.notification;
+
+  for (subscription of subscriptions) {
+    await webpush.sendNotification(subscription, JSON.stringify(notification));
   }
-  return outputArray;
-}
+  res.send('Sent!');
+});
 
-if ('serviceWorker' in navigator && 'PushManager' in window) {
-  console.log('Service Worker and Push is supported');
+app.use(router);
 
-  navigator.serviceWorker.register('sw.js').then((registration) => {
-    console.log('Service Worker is registered', registration);
-  }).catch((error) => {
-    console.error('Service Worker error', error);
-  });
-
-  navigator.serviceWorker.ready.then((registration) => {
-    registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlB64ToUint8Array(applicationServerPublicKey)
-    }).then((subscription) => {
-      console.log('The Subscription is successful', JSON.stringify(subscription));
-      // @Todo Store subscription to the app server
-    }).catch((error) => {
-      console.error('Subscription error', error);
-    });
-  });
-} else {
-  console.warn('Service Worker and Push is not supported');
-}
+app.listen(3000, () => console.log('Listening on port 3000!'))
