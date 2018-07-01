@@ -21,7 +21,10 @@ npm install
     cd client
     python -m SimpleHTTPServer 8888
     ```
-3. Send notification to the subscribed users
+3. Visit the client app and allow notification
+    ![Push Notification](https://user-images.githubusercontent.com/1708683/42136238-64a2e2bc-7d79-11e8-95c4-80afdd9fa66b.png)
+
+4. Send notification to the subscribed users
     Simple notification
     ```bash
     curl -XPOST -H 'Content-Type: application/json' http://localhost:3000/send -d '
@@ -35,6 +38,8 @@ npm install
     }
     '
     ```
+    You will get the notification like this
+    ![Push Notification](https://user-images.githubusercontent.com/1708683/42136289-50e94008-7d7a-11e8-9e60-7fe9484ae3ba.png)
 
     Notification with action buttons
     ```bash
