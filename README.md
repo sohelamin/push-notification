@@ -2,6 +2,7 @@
 > Push Notification Implementation Using Service Worker & Web Push Protocol
 
 ## Pre-requisites
+- HTTPS enabled site
 - [Service Worker](https://developers.google.com/web/fundamentals/primers/service-workers/) (Client)
 - [Web Push](https://github.com/web-push-libs/web-push) (Server)
 
