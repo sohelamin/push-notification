@@ -12,41 +12,43 @@ npm install
 
 ## Usage
 1. Run the Web Push server
-  ```
-  node app.js
-  ```
+    ```
+    node app.js
+    ```
 
 2. Serve the client app with any http server
-  ```
-  cd client
-  python -m SimpleHTTPServer 8888
-  ```
+    ```
+    cd client
+    python -m SimpleHTTPServer 8888
+    ```
 3. Send notification to the subscribed users
-  ```bash
-  curl -XPOST -H 'Content-Type: application/json' http://localhost:3000/send -d '
-  {
-    "notification": {
-      "title": "Push Notification",
-      "body": "Hey Dude!",
-      "icon": "icon.png",
-      "url": "https://www.appzcoder.com/"
+    Simple notification
+    ```bash
+    curl -XPOST -H 'Content-Type: application/json' http://localhost:3000/send -d '
+    {
+        "notification": {
+            "title": "Push Notification",
+            "body": "Hey Dude!",
+            "icon": "icon.png",
+            "url": "https://www.appzcoder.com/"
+        }
     }
-  }
-  '
-  ```
+    '
+    ```
 
-  ```bash
-  curl -XPOST -H 'Content-Type: application/json' http://localhost:3000/send -d '
-  {
-    "notification": {
-      "title": "Push Notification",
-      "body": "Hey Dude!",
-      "icon": "icon.png",
-      "actions": [
-        { "action": "ok", "title": "Ok", "url": "https://www.appzcoder.com/" },
-        { "action": "cancel", "title": "Cancel", "url": "https://google.com/" }
-      ]
+    Notification with action buttons
+    ```bash
+    curl -XPOST -H 'Content-Type: application/json' http://localhost:3000/send -d '
+    {
+        "notification": {
+            "title": "Push Notification",
+            "body": "Hey Dude!",
+            "icon": "icon.png",
+            "actions": [
+                { "action": "ok", "title": "Ok", "url": "https://www.appzcoder.com/" },
+                { "action": "cancel", "title": "Cancel", "url": "https://google.com/" }
+            ]
+        }
     }
-  }
-  '
-  ```
+    '
+    ```
