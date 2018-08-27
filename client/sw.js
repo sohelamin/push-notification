@@ -28,9 +28,8 @@ self.addEventListener('notificationclick', (event) => {
     return;
   }
 
-  if (data.url) {
-    event.waitUntil(clients.openWindow(data.url));
-  } else if (event.action) {
+  if (data.url && event.action === "") event.waitUntil(clients.openWindow(data.url));
+  if (event.action) {
     const targetAction = data.actions.find(action => action.action === event.action);
     event.waitUntil(clients.openWindow(targetAction.url));
   }
